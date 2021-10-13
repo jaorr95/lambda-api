@@ -8,6 +8,13 @@ Una vez deplegado se puede acceder a la api usando a traves de la siguiente url:
 
 * https://api.jesus-lahaus.tk
 
+El serverless crea los siguientes recursos:
+
+* Lambda
+* ApiGateway
+* Cloudwatch logs
+* Route53
+
 
 ### INFRAESTRUCTURA
 
@@ -21,6 +28,7 @@ La infraestructura es deplegada usando Terraform y consta de los siguientes recu
 * ACM
 * Route53
 * Parameter Store
+* Cloudwatch logs
 
 En la instancia de ec2, esta corriendo ADMINER para poder ingresar desde afuera de la vpc a la instancia de RDS. Se puede acceder a traves de la siguiente url:
 
