@@ -1,0 +1,6 @@
+flask==1.1.4
+Flask-SQLAlchemy==2.5.1
+pg8000==1.21.3
+Flask-Script==2.0.6
+Flask-Migrate==2.7.0
+SQLAlchemy-Utils==0.37.8

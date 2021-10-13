@@ -1,0 +1,16 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "Lahaus api",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jesus Rivero",
+  "license": "ISC",
+  "devDependencies": {
+    "serverless-domain-manager": "^5.1.5",
+    "serverless-python-requirements": "^5.1.1",
+    "serverless-wsgi": "^2.0.2"
+  }
+}

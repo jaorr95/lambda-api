@@ -1,0 +1,51 @@
+# serverless.yml
+frameworkVersion: '2'
+
+service: lahaus-api
+
+variablesResolutionMode: 20210326
+
+plugins:
+  - serverless-python-requirements
+  - serverless-wsgi
+  - serverless-domain-manager
+
+custom:
+  wsgi:
+    app: app.app
+    packRequirements: false
+  pythonRequirements:
+    dockerizePip: true
+    useDownloadCache: false
+  customDomains:
+    - rest:
+        domainName: api.jesus-lahaus.tk
+        basePath: ''
+        stage: ${opt:stage, 'dev'}
+        hostedZoneId: ${env:ZONE_ID}
+        createRoute53Record: true
+        certificateArn: ${ssm:/lahaus/acm/arn}
+        endpointType: regional
+
+    
+provider:
+  name: aws
+  runtime: python3.8
+  lambdaHashingVersion: 20201221
+  stage: ${opt:stage, 'dev'}
+  region: ${env:region, 'us-west-2'}
+  vpc: 
+    securityGroupIds: ${ssm:/lahaus/${opt:stage, self:provider.stage, 'dev'}/sg/ids}
+    subnetIds: ${ssm:/lahaus/${opt:stage, self:provider.stage, 'dev'}/vpc/vpc-lahaus/private_subnets_id}
+
+
+functions:
+  app:
+    handler: wsgi_handler.handler
+    timeout: 29 #segundos
+    environment:
+      APP_SETTINGS: ${env:ENV_CONFIG, 'config.DevelopmentConfig'}
+      DATABASE_URI: ${ssm:/lahaus/${opt:stage, self:provider.stage, 'dev'}/database/lahaus-postgresql/endpoint}/lahaus
+    events:
+      - http: ANY /
+      - http: 'ANY {proxy+}'
