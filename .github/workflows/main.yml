@@ -1,0 +1,27 @@
+name: Infra Github Action
+on: 
+  push:
+    branches:
+      - "main"
+    paths:
+    - 'api/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14.17.5'
+      - name: Install dependencies
+        working-directory: api
+        run: npm install && npm install -g serverless@2.55.0 
+      - name: Deploy
+        working-directory: api
+        run: sls create_domain && sls deploy
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          ZONE_ID: ${{ secrets.ZONE_ID }}
